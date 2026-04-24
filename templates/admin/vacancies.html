@@ -2,6 +2,25 @@
 {% block content %}
 <div class="grid two">
   <div class="card">
+    <h2>{% if edit_vacancy %}Редактирование вакансии{% else %}Новая вакансия{% endif %}</h2>
+    <form method="post" action="{% if edit_vacancy %}{{ url_for('admin_vacancy_edit', vacancy_id=edit_vacancy.id) }}{% else %}{{ url_for('admin_vacancies') }}{% endif %}" class="form">
+      <div><label>Название</label><input name="title" value="{{ edit_vacancy.title if edit_vacancy else '' }}" required></div>
+      <div><label>Компания</label><input name="company" value="{{ edit_vacancy.company if edit_vacancy else '' }}" required></div>
+      <div><label>Контакты</label><input name="contacts" value="{{ edit_vacancy.contacts if edit_vacancy else '' }}"></div>
+      <div><label>Описание</label><textarea name="description">{{ edit_vacancy.description if edit_vacancy else '' }}</textarea></div>
+      <div><label>Статус</label>
+        <select name="status">
+          <option {% if not edit_vacancy or edit_vacancy.status=='active' %}selected{% endif %}>active</option>
+          <option {% if edit_vacancy and edit_vacancy.status=='hidden' %}selected{% endif %}>hidden</option>
+          <option {% if edit_vacancy and edit_vacancy.status=='archive' %}selected{% endif %}>archive</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" type="submit">{% if edit_vacancy %}Обновить{% else %}Сохранить{% endif %}</button>
+        {% if edit_vacancy %}
+          <a class="btn light" href="{{ url_for('admin_vacancies') }}">Отмена</a>
+        {% endif %}
+      </div>
     <h2>Новая вакансия</h2>
     <form method="post" class="form">
       <div><label>Название</label><input name="title" required></div>
@@ -24,6 +43,12 @@
           <select name="status"><option {% if vacancy.status=='active' %}selected{% endif %}>active</option><option {% if vacancy.status=='hidden' %}selected{% endif %}>hidden</option><option {% if vacancy.status=='archive' %}selected{% endif %}>archive</option></select>
           <button class="btn light" type="submit">Обновить</button>
         </form>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <a class="btn light" href="{{ url_for('admin_vacancy_edit', vacancy_id=vacancy.id) }}">Редактировать</a>
+          <form method="post" action="{{ url_for('admin_vacancy_delete', vacancy_id=vacancy.id) }}" onsubmit="return confirm('Удалить вакансию?');">
+            <button class="btn gray" type="submit">Удалить</button>
+          </form>
+        </div>
       </div>
     {% else %}<p>Вакансий пока нет.</p>{% endfor %}
   </div>

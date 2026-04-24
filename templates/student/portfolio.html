@@ -2,6 +2,17 @@
 {% block content %}
 <div class="grid two">
   <div class="card">
+    <h2>{% if edit_entry %}Редактировать запись портфолио{% else %}Добавить запись портфолио{% endif %}</h2>
+    <form method="post" action="{% if edit_entry %}{{ url_for('student_portfolio_edit', entry_id=edit_entry.id) }}{% else %}{{ url_for('student_portfolio') }}{% endif %}" class="form">
+      <div><label>Название</label><input name="title" value="{{ edit_entry.title if edit_entry else '' }}" required></div>
+      <div><label>Описание</label><textarea name="description">{{ edit_entry.description if edit_entry else '' }}</textarea></div>
+      <div><label>Ссылка</label><input name="link" value="{{ edit_entry.link if edit_entry else '' }}"></div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" type="submit">{% if edit_entry %}Сохранить{% else %}Добавить{% endif %}</button>
+        {% if edit_entry %}
+          <a class="btn light" href="{{ url_for('student_portfolio') }}">Отмена</a>
+        {% endif %}
+      </div>
     <h2>Добавить запись портфолио</h2>
     <form method="post" class="form">
       <div><label>Название</label><input name="title" required></div>
@@ -17,6 +28,12 @@
         <strong>{{ entry.title }}</strong>
         <span class="status {{ entry.status }}">{{ entry.status }}</span>
         <p>{{ entry.description }}</p>
+        <div style="display:flex; gap:8px;">
+          <a class="btn light" href="{{ url_for('student_portfolio_edit', entry_id=entry.id) }}">Редактировать</a>
+          <form method="post" action="{{ url_for('student_portfolio_delete', entry_id=entry.id) }}" onsubmit="return confirm('Удалить запись портфолио?');">
+            <button class="btn gray" type="submit">Удалить</button>
+          </form>
+        </div>
       </div>
     {% else %}<p>Записей пока нет.</p>{% endfor %}
   </div>
