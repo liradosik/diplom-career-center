@@ -1,0 +1,9 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="card">
+  <h2>Студенты моей группы</h2>
+  {% for student in students %}
+    <p><a href="{{ url_for('curator_student_portfolio', student_id=student.id) }}">{{ student.full_name }}</a> — {{ student.group_name }}</p>
+  {% else %}<p>Пока нет прикреплённых студентов.</p>{% endfor %}
+</div>
+{% endblock %}

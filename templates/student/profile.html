@@ -1,0 +1,13 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="card" style="max-width:760px;">
+  <h2>Профиль студента</h2>
+  <form method="post" class="form">
+    <div><label>ФИО</label><input name="full_name" value="{{ current_user.full_name or '' }}" required></div>
+    <div><label>Группа</label><input name="group_name" value="{{ current_user.group_name or '' }}"></div>
+    <div><label>Контакты</label><input name="contacts" value="{{ current_user.contacts or '' }}"></div>
+    <div><label>О себе</label><textarea name="about">{{ current_user.about or '' }}</textarea></div>
+    <button class="btn" type="submit">Сохранить</button>
+  </form>
+</div>
+{% endblock %}

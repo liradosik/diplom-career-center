@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Кабинет{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><img src="{{ url_for('static', filename='images/logo.svg') }}" alt="logo">ИРКПО</div>
+    <small>{{ current_user.full_name }} ({{ current_user.role }})</small>
+    <nav>
+      {% if current_user.role == 'student' %}
+      <a href="{{ url_for('student_dashboard') }}">Главная</a>
+      <a href="{{ url_for('student_profile') }}">Профиль</a>
+      <a href="{{ url_for('student_portfolio') }}">Портфолио</a>
+      <a href="{{ url_for('student_vacancies') }}">Вакансии</a>
+      <a href="{{ url_for('student_courses') }}">Курсы</a>
+      {% elif current_user.role == 'admin' %}
+      <a href="{{ url_for('admin_dashboard') }}">Панель</a>
+      <a href="{{ url_for('admin_students') }}">Студенты</a>
+      <a href="{{ url_for('admin_vacancies') }}">Вакансии</a>
+      <a href="{{ url_for('admin_courses') }}">Курсы/семинары</a>
+      {% elif current_user.role == 'curator' %}
+      <a href="{{ url_for('curator_students') }}">Мои студенты</a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}">Выход</a>
+    </nav>
+  </aside>
+  <main class="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+</body>
+</html>
