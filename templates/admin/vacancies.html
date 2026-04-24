@@ -21,6 +21,16 @@
           <a class="btn light" href="{{ url_for('admin_vacancies') }}">Отмена</a>
         {% endif %}
       </div>
+    <h2>Новая вакансия</h2>
+    <form method="post" class="form">
+      <div><label>Название</label><input name="title" required></div>
+      <div><label>Компания</label><input name="company" required></div>
+      <div><label>Контакты</label><input name="contacts"></div>
+      <div><label>Описание</label><textarea name="description"></textarea></div>
+      <div><label>Статус</label>
+        <select name="status"><option>active</option><option>hidden</option><option>archive</option></select>
+      </div>
+      <button class="btn" type="submit">Сохранить</button>
     </form>
   </div>
   <div class="card">
