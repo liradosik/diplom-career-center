@@ -1,0 +1,38 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="card" style="max-width:860px;">
+  <h2>Редактирование программы</h2>
+  <form method="post" class="form">
+    <div><label>Название</label><input name="title" value="{{ course.title }}" required></div>
+    <div>
+      <label>Тип</label>
+      <select name="kind">
+        <option value="course" {% if course.kind=='course' %}selected{% endif %}>course</option>
+        <option value="seminar" {% if course.kind=='seminar' %}selected{% endif %}>seminar</option>
+        <option value="practice" {% if course.kind=='practice' %}selected{% endif %}>practice</option>
+      </select>
+    </div>
+    <div>
+      <label>Формат</label>
+      <select name="format_type">
+        <option value="online" {% if course.format_type=='online' %}selected{% endif %}>online</option>
+        <option value="offline" {% if course.format_type=='offline' %}selected{% endif %}>offline</option>
+      </select>
+    </div>
+    <div><label>Места (для offline)</label><input type="number" min="0" name="places" value="{{ course.places or '' }}"></div>
+    <div><label>Описание</label><textarea name="description">{{ course.description or '' }}</textarea></div>
+    <div>
+      <label>Статус</label>
+      <select name="status">
+        <option value="active" {% if course.status=='active' %}selected{% endif %}>active</option>
+        <option value="hidden" {% if course.status=='hidden' %}selected{% endif %}>hidden</option>
+        <option value="archive" {% if course.status=='archive' %}selected{% endif %}>archive</option>
+      </select>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn" type="submit">Сохранить</button>
+      <a class="btn light" href="{{ url_for('admin_courses') }}">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

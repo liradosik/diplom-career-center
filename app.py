@@ -95,8 +95,6 @@ def role_required(*roles):
         return wrapper
 
     return decorator
-
-
 @app.route("/")
 def index():
     if current_user.is_authenticated:
@@ -177,7 +175,6 @@ def student_portfolio():
 
     entries = PortfolioEntry.query.filter_by(student_id=current_user.id).order_by(PortfolioEntry.created_at.desc()).all()
     return render_template("student/portfolio.html", entries=entries)
-
 
 @app.route("/resume/<token>")
 def public_resume(token):
@@ -260,12 +257,12 @@ def admin_students():
 @role_required("admin")
 def admin_vacancies():
     if request.method == "POST":
+      
         vacancy = Vacancy(
             title=request.form.get("title", "").strip(),
             company=request.form.get("company", "").strip(),
             description=request.form.get("description", "").strip(),
             contacts=request.form.get("contacts", "").strip(),
-            status=request.form.get("status", "active"),
         )
         db.session.add(vacancy)
         db.session.commit()
@@ -281,11 +278,9 @@ def admin_vacancies():
 @role_required("admin")
 def admin_vacancy_status(vacancy_id):
     vacancy = Vacancy.query.get_or_404(vacancy_id)
-    vacancy.status = request.form.get("status", "active")
     db.session.commit()
     flash("Статус вакансии изменён.", "success")
     return redirect(url_for("admin_vacancies"))
-
 
 @app.route("/admin/courses", methods=["GET", "POST"])
 @login_required
@@ -298,9 +293,6 @@ def admin_courses():
             title=request.form.get("title", "").strip(),
             kind=request.form.get("kind", "course"),
             format_type=format_type,
-            places=int(places) if format_type == "offline" and places else None,
-            description=request.form.get("description", "").strip(),
-            status=request.form.get("status", "active"),
         )
         db.session.add(course)
         db.session.commit()
@@ -316,11 +308,9 @@ def admin_courses():
 @role_required("admin")
 def admin_course_status(course_id):
     course = Course.query.get_or_404(course_id)
-    course.status = request.form.get("status", "active")
     db.session.commit()
     flash("Статус программы изменён.", "success")
     return redirect(url_for("admin_courses"))
-
 
 @app.route("/vacancies")
 @login_required
