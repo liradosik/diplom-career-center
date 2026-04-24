@@ -1,0 +1,34 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: #f5f8fc; color: #1f2933; }
+a { color: #1e66d0; text-decoration: none; }
+.container { max-width: 1160px; margin: 0 auto; padding: 0 16px; }
+header.top { background: #fff; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 10; }
+header .row { display:flex; justify-content:space-between; align-items:center; padding: 14px 0; gap:16px; }
+.logo { display:flex; align-items:center; gap:10px; font-weight:700; }
+.logo img { width: 36px; height: 36px; border-radius: 50%; border:1px solid #dbe4f0; background:#fff; padding:4px; }
+.btn { border:none; border-radius:10px; background:#1e66d0; color:#fff; padding:10px 14px; cursor:pointer; }
+.btn.gray { background:#6b7280; }
+.btn.light { background:#fff; color:#374151; border:1px solid #dbe4f0; }
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:18px; box-shadow: 0 8px 24px rgba(15,23,42,0.04); }
+.grid { display:grid; gap:14px; }
+.grid.two { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+input, textarea, select { width:100%; padding:10px 12px; border-radius:10px; border:1px solid #dbe4f0; background:#fff; }
+textarea { min-height: 96px; }
+label { font-size:14px; font-weight:600; }
+.form { display:grid; gap:12px; }
+.flash { margin: 12px 0; padding: 10px 12px; border-radius:10px; font-size:14px; }
+.flash.success { background:#e8f7ef; color:#1b7c4a; }
+.flash.error { background:#fdecec; color:#b42318; }
+.layout { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
+.sidebar { background:#fff; border-right:1px solid #e5e7eb; padding:14px; }
+.sidebar nav { display:grid; gap:8px; margin-top:12px; }
+.sidebar a { padding:10px 12px; border-radius:10px; color:#374151; }
+.sidebar a.active, .sidebar a:hover { background:#eef5ff; color:#1e66d0; }
+.main { padding:18px; }
+.status { display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; }
+.status.active, .status.approved { background:#e8f7ef; color:#1b7c4a; }
+.status.hidden, .status.pending { background:#fff4db; color:#9a6700; }
+.status.archive, .status.rejected { background:#f3f4f6; color:#4b5563; }
+.modal { position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; align-items:center; justify-content:center; }
+.modal.open { display:flex; }
+.modal-content { width:min(520px, 94vw); }

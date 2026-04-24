@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Моё портфолио — Центр карьеры ИРКПО</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #f5f8fc;
+      color: #1f2933;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: #ffffff;
+      border-right: 1px solid #e5e7eb;
+      padding: 22px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 8px;
+    }
+
+    .logo-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid #dbe4f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(30,102,208,0.08);
+      flex-shrink: 0;
+    }
+
+    .logo-circle img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #4b5563;
+      padding: 13px 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: 0.2s ease;
+    }
+
+    .menu a:hover {
+      background: #eef5ff;
+      color: #1E66D0;
+    }
+
+    .menu a.active {
+      background: linear-gradient(135deg, #1E66D0, #3D8BFF);
+      color: white;
+      box-shadow: 0 10px 20px rgba(30,102,208,0.18);
+    }
+
+    .menu-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      background: rgba(30,102,208,0.08);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .menu a.active .menu-icon {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .main {
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .search {
+      flex: 1;
+      max-width: 520px;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      height: 46px;
+      border: 1px solid #dbe4f0;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 0 16px 0 42px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1E66D0, #7ab4ff);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .hero {
+      border-radius: 26px;
+      padding: 28px;
+      background: linear-gradient(160deg, #ffffff 0%, #f8fbff 50%, #e9f2ff 100%);
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 14px 36px rgba(15,23,42,0.05);
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #1E66D0;
+      margin-bottom: 10px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 780px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      border: none;
+      color: white;
+      background: linear-gradient(135deg, #1E66D0, #3D8BFF);
+      box-shadow: 0 10px 20px rgba(30,102,208,0.18);
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 1px solid #dbe4f0;
+      color: #1f2933;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 22px;
+    }
+
+    .section-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.04);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .section-link {
+      text-decoration: none;
+      color: #1E66D0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 8px 0 0;
+    }
+
+    .avatar-large {
+      width: 94px;
+      height: 94px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1E66D0, #7ab4ff);
+      color: white;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .profile-card h4 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .about {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      background: #fbfdff;
+      border: 1px solid #e9eef5;
+      text-align: left;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat-card {
+      border-radius: 18px;
+      background: #fbfdff;
+      border: 1px solid #e9eef5;
+      padding: 16px;
+    }
+
+    .stat-card .num {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1E66D0;
+      margin: 8px 0 4px;
+    }
+
+    .quick-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .quick-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 16px;
+      border-radius: 16px;
+      background: #fbfdff;
+      border: 1px solid #e9eef5;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .portfolio-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .portfolio-item {
+      border: 1px solid #e9eef5;
+      border-radius: 20px;
+      padding: 18px;
+      background: #fbfdff;
+    }
+
+    .portfolio-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .item-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .badge-light {
+      background: #eef5ff;
+      color: #1E66D0;
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .item-sub {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .mini-btn {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid #dbe4f0;
+      background: white;
+      color: #1f2933;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width: 1150px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .main {
+        padding: 18px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions,
+      .mini-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-circle">
+          <img src="irpolog.png" alt="Логотип ИРКПО" />
+        </div>
+        <div>
+          <div style="font-size:12px;color:#6b7280">ИРКПО</div>
+          <div style="font-weight:700">Центр карьеры ИРКПО</div>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <a href="#"><span class="menu-icon">⌂</span>Личный кабинет</a>
+        <a href="#" class="active"><span class="menu-icon">◫</span>Моё портфолио</a>
+        <a href="#"><span class="menu-icon">✎</span>Конструктор резюме</a>
+        <a href="#"><span class="menu-icon">◉</span>Вакансии</a>
+        <a href="#"><span class="menu-icon">◎</span>Курсы и семинары</a>
+        <a href="#"><span class="menu-icon">⚙</span>Настройки</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="search">
+         
+        </div>
+
+        
+      </div>
+
+      <section class="hero">
+        <div class="eyebrow">Электронное портфолио</div>
+        <h1>Моё портфолио</h1>
+        <p>
+          Здесь собраны основные сведения о студенте, достижения, проекты, навыки,
+          рекомендации и другие материалы, которые можно использовать для создания резюме.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary">Добавить запись</button>
+          <button class="btn-secondary">Поделиться портфолио</button>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <div>
+          <section class="section-card">
+            <div class="section-head">
+              <h3>Профиль студента</h3>
+              <a href="#" class="section-link">Редактировать</a>
+            </div>
+
+            <div class="profile-card">
+              <div class="avatar-large">ЛД</div>
+              <h4>Лира Досик</h4>
+              <div class="muted">Информационные системы и программирование</div>
+              <div class="muted">Группа И-422</div>
+
+              <div class="about">
+                <div style="font-size:14px;font-weight:700; margin-bottom:8px;">О себе</div>
+                <div class="muted">
+                  Студентка, интересующаяся веб-дизайном, интерфейсами и цифровыми проектами.
+                  Развиваю навыки в создании макетов, работе с визуальными материалами и оформлении портфолио.
+                </div>
+              </div>
+            </div>
+
+            
+          </section>
+        </div>
+
+        <div>
+          <section class="section-card">
+            <div class="section-head">
+              <h3>Разделы портфолио</h3>
+              <a href="#" class="section-link">Все разделы</a>
+            </div>
+
+            <div class="portfolio-sections">
+              <div class="portfolio-item">
+                <div class="portfolio-top">
+                  <div class="item-title">Учебные достижения</div>
+                  <div class="badge-light">12 записей</div>
+                </div>
+                <p class="item-sub">Сертификаты, дипломы, результаты курсов и другие учебные материалы.</p>
+                <div class="mini-actions">
+                  <button class="mini-btn">Открыть</button>
+                  <button class="mini-btn">Добавить</button>
+                </div>
+              </div>
+
+              <div class="portfolio-item">
+                <div class="portfolio-top">
+                  <div class="item-title">Проекты и работы</div>
+                  <div class="badge-light">6 записей</div>
+                </div>
+                <p class="item-sub">Учебные проекты, примеры работ, исследования и цифровые макеты.</p>
+                <div class="mini-actions">
+                  <button class="mini-btn">Открыть</button>
+                  <button class="mini-btn">Добавить</button>
+                </div>
+              </div>
+
+              <div class="portfolio-item">
+                <div class="portfolio-top">
+                  <div class="item-title">Навыки</div>
+                  <div class="badge-light">14 навыков</div>
+                </div>
+                <p class="item-sub">Профессиональные и универсальные навыки, которые можно включить в резюме.</p>
+                <div class="mini-actions">
+                  <button class="mini-btn">Открыть</button>
+                  <button class="mini-btn">Добавить</button>
+                </div>
+              </div>
+
+              
+                
+                  
+
+              <div class="portfolio-item">
+                <div class="portfolio-top">
+                  <div class="item-title">Общественная и творческая деятельность</div>
+                  <div class="badge-light">5 записей</div>
+                </div>
+                <p class="item-sub">Участие в конкурсах, волонтёрских и внеучебных активностях.</p>
+                <div class="mini-actions">
+                  <button class="mini-btn">Открыть</button>
+                  <button class="mini-btn">Добавить</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

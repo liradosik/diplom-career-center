@@ -1,0 +1,27 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<h2>Вакансии</h2>
+<div class="grid two">
+{% for vacancy in vacancies %}
+  <div class="card">
+    <h3>{{ vacancy.title }}</h3>
+    <p>{{ vacancy.company }}</p>
+    <p>{{ vacancy.description }}</p>
+    <button class="btn" onclick="openRespondModal('{{ vacancy.id }}', '{{ vacancy.contacts|default('', true)|replace("'", "&#39;") }}', '{{ url_for('public_resume', token=current_user.resume_public_token, _external=True) }}')">Откликнуться</button>
+  </div>
+{% else %}<p>Нет активных вакансий.</p>{% endfor %}
+</div>
+
+<div class="modal" id="respond-modal" onclick="if(event.target.id==='respond-modal'){closeRespondModal()}">
+  <div class="modal-content card">
+    <h3>Отклик на вакансию #<span id="modal-vacancy-id"></span></h3>
+    <p><strong>Контакты:</strong> <span id="modal-contacts"></span></p>
+    <label>Ссылка на публичное резюме</label>
+    <input id="resume-link" readonly>
+    <div style="margin-top:10px; display:flex; gap:10px;">
+      <button class="btn" onclick="copyResumeLink()">Скопировать ссылку</button>
+      <button class="btn gray" onclick="closeRespondModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
