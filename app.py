@@ -75,6 +75,18 @@ class Course(db.Model):
     status = db.Column(db.String(20), default="active", nullable=False)  # active, hidden, archive
 
 
+class CourseRegistration(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey("course.id"), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    student = db.relationship("User", backref="course_registrations")
+    course = db.relationship("Course", backref="registrations")
+
+    __table_args__ = (db.UniqueConstraint("student_id", "course_id", name="uq_student_course_registration"),)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
@@ -100,6 +112,21 @@ def role_required(*roles):
 def is_valid_status(value: str) -> bool:
     # Допустимые статусы для вакансий и учебных программ.
     return value in {"active", "hidden", "archive"}
+
+
+STATUS_LABELS = {
+    "active": "Активно",
+    "hidden": "Скрыто",
+    "archive": "Архив",
+    "pending": "Ожидает проверки",
+    "approved": "Подтверждено",
+    "rejected": "Отклонено",
+}
+
+
+@app.context_processor
+def inject_status_labels():
+    return {"status_labels": STATUS_LABELS}
 
 
 @app.route("/")
@@ -249,8 +276,24 @@ def curator_student_portfolio(student_id):
         flash("Статус записи обновлён.", "success")
         return redirect(url_for("curator_student_portfolio", student_id=student.id))
 
-    entries = PortfolioEntry.query.filter_by(student_id=student.id).order_by(PortfolioEntry.created_at.desc()).all()
-    return render_template("curator/portfolio_review.html", student=student, entries=entries)
+    review_filter = request.args.get("status", "all")
+    entries_query = PortfolioEntry.query.filter_by(student_id=student.id).order_by(PortfolioEntry.created_at.desc())
+    if review_filter in {"pending", "approved", "rejected"}:
+        entries_query = entries_query.filter_by(status=review_filter)
+    else:
+        review_filter = "all"
+
+    entries = entries_query.all()
+    pending_entries = PortfolioEntry.query.filter_by(student_id=student.id, status="pending").order_by(
+        PortfolioEntry.created_at.desc()
+    ).all()
+    return render_template(
+        "curator/portfolio_review.html",
+        student=student,
+        entries=entries,
+        pending_entries=pending_entries,
+        review_filter=review_filter,
+    )
 
 
 @app.route("/admin")
@@ -317,9 +360,15 @@ def admin_vacancies():
         flash("Вакансия сохранена.", "success")
         return redirect(url_for("admin_vacancies"))
 
-    vacancies = Vacancy.query.order_by(Vacancy.created_at.desc()).all()
-    return render_template("admin/vacancies.html", vacancies=vacancies, edit_vacancy=None)
-    return render_template("admin/vacancies.html", vacancies=vacancies)
+    status_filter = request.args.get("status", "all")
+    vacancies_query = Vacancy.query.order_by(Vacancy.created_at.desc())
+    if status_filter in {"active", "hidden", "archive"}:
+        vacancies_query = vacancies_query.filter_by(status=status_filter)
+    else:
+        status_filter = "all"
+
+    vacancies = vacancies_query.all()
+    return render_template("admin/vacancies.html", vacancies=vacancies, edit_vacancy=None, status_filter=status_filter)
 
 
 @app.route("/admin/vacancies/<int:vacancy_id>/status", methods=["POST"])
@@ -409,9 +458,15 @@ def admin_courses():
         flash("Курс/семинар/практика сохранены.", "success")
         return redirect(url_for("admin_courses"))
 
-    courses = Course.query.order_by(Course.id.desc()).all()
-    return render_template("admin/courses.html", courses=courses, edit_course=None)
-    return render_template("admin/courses.html", courses=courses)
+    status_filter = request.args.get("status", "all")
+    courses_query = Course.query.order_by(Course.id.desc())
+    if status_filter in {"active", "hidden", "archive"}:
+        courses_query = courses_query.filter_by(status=status_filter)
+    else:
+        status_filter = "all"
+
+    courses = courses_query.all()
+    return render_template("admin/courses.html", courses=courses, edit_course=None, status_filter=status_filter)
 
 
 @app.route("/admin/courses/<int:course_id>/status", methods=["POST"])
@@ -491,7 +546,52 @@ def student_vacancies():
 @role_required("student")
 def student_courses():
     courses = Course.query.filter_by(status="active").order_by(Course.id.desc()).all()
-    return render_template("student/courses.html", courses=courses)
+    registrations = CourseRegistration.query.filter_by(student_id=current_user.id).all()
+    enrolled_course_ids = {registration.course_id for registration in registrations}
+
+    offline_counts = {
+        course_id: total
+        for course_id, total in db.session.query(CourseRegistration.course_id, db.func.count(CourseRegistration.id))
+        .group_by(CourseRegistration.course_id)
+        .all()
+    }
+    course_availability = {}
+    for course in courses:
+        if course.format_type == "offline":
+            total_places = course.places or 0
+            used_places = offline_counts.get(course.id, 0)
+            course_availability[course.id] = max(total_places - used_places, 0)
+
+    return render_template(
+        "student/courses.html",
+        courses=courses,
+        enrolled_course_ids=enrolled_course_ids,
+        course_availability=course_availability,
+    )
+
+
+@app.route("/courses/<int:course_id>/enroll", methods=["POST"])
+@login_required
+@role_required("student")
+def student_course_enroll(course_id):
+    course = Course.query.filter_by(id=course_id, status="active").first_or_404()
+    existing = CourseRegistration.query.filter_by(student_id=current_user.id, course_id=course.id).first()
+    if existing:
+        flash("Вы уже записаны", "error")
+        return redirect(url_for("student_courses"))
+
+    if course.format_type == "offline":
+        total_places = course.places or 0
+        used_places = CourseRegistration.query.filter_by(course_id=course.id).count()
+        if used_places >= total_places:
+            flash("Мест нет", "error")
+            return redirect(url_for("student_courses"))
+
+    registration = CourseRegistration(student_id=current_user.id, course_id=course.id)
+    db.session.add(registration)
+    db.session.commit()
+    flash("Вы записались", "success")
+    return redirect(url_for("student_courses"))
 
 
 def seed_if_empty():

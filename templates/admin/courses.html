@@ -27,9 +27,9 @@
 
       <div><label>Статус</label>
         <select name="status">
-          <option value="active" {% if not edit_course or edit_course.status=='active' %}selected{% endif %}>active</option>
-          <option value="hidden" {% if edit_course and edit_course.status=='hidden' %}selected{% endif %}>hidden</option>
-          <option value="archive" {% if edit_course and edit_course.status=='archive' %}selected{% endif %}>archive</option>
+          <option value="active" {% if not edit_course or edit_course.status=='active' %}selected{% endif %}>{{ status_labels['active'] }}</option>
+          <option value="hidden" {% if edit_course and edit_course.status=='hidden' %}selected{% endif %}>{{ status_labels['hidden'] }}</option>
+          <option value="archive" {% if edit_course and edit_course.status=='archive' %}selected{% endif %}>{{ status_labels['archive'] }}</option>
         </select>
       </div>
 
@@ -44,11 +44,20 @@
 
   <div class="card">
     <h2>Список программ</h2>
+    <form method="get" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+      <label for="courses-status-filter">Фильтр статуса</label>
+      <select id="courses-status-filter" name="status" onchange="this.form.submit()">
+        <option value="all" {% if status_filter == 'all' %}selected{% endif %}>Все</option>
+        <option value="active" {% if status_filter == 'active' %}selected{% endif %}>{{ status_labels['active'] }}</option>
+        <option value="hidden" {% if status_filter == 'hidden' %}selected{% endif %}>{{ status_labels['hidden'] }}</option>
+        <option value="archive" {% if status_filter == 'archive' %}selected{% endif %}>{{ status_labels['archive'] }}</option>
+      </select>
+    </form>
 
     {% for course in courses %}
       <div style="border-bottom:1px solid #eee; padding:10px 0;">
         <strong>{{ course.title }}</strong> ({{ course.kind }}, {{ course.format_type }})
-        <span class="status {{ course.status }}">{{ course.status }}</span>
+        <span class="status {{ course.status }}">{{ status_labels.get(course.status, course.status) }}</span>
 
         {% if course.format_type == 'offline' %}
           <p style="margin:6px 0;">Мест: {{ course.places or 0 }}</p>
@@ -58,9 +67,9 @@
 
         <form method="post" action="{{ url_for('admin_course_status', course_id=course.id) }}" style="display:flex; gap:8px; margin-bottom:8px;">
           <select name="status">
-            <option value="active" {% if course.status=='active' %}selected{% endif %}>active</option>
-            <option value="hidden" {% if course.status=='hidden' %}selected{% endif %}>hidden</option>
-            <option value="archive" {% if course.status=='archive' %}selected{% endif %}>archive</option>
+            <option value="active" {% if course.status=='active' %}selected{% endif %}>{{ status_labels['active'] }}</option>
+            <option value="hidden" {% if course.status=='hidden' %}selected{% endif %}>{{ status_labels['hidden'] }}</option>
+            <option value="archive" {% if course.status=='archive' %}selected{% endif %}>{{ status_labels['archive'] }}</option>
           </select>
           <button class="btn light" type="submit">Обновить статус</button>
         </form>
