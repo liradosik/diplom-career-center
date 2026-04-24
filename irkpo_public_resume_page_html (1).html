@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Резюме студента — Центр карьеры ИРКПО</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #f5f8fc;
+      color: #1f2933;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 28px;
+    }
+
+    .topbar {
+      max-width: 1180px;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      box-shadow: 0 10px 26px rgba(15,23,42,0.04);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid #dbe4f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(30,102,208,0.08);
+      flex-shrink: 0;
+    }
+
+    .logo-circle img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      height: 42px;
+      padding: 0 16px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      border: none;
+      color: white;
+      background: linear-gradient(135deg, #1E66D0, #3D8BFF);
+      box-shadow: 0 10px 20px rgba(30,102,208,0.18);
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 1px solid #dbe4f0;
+      color: #1f2933;
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 0 auto 22px;
+      border-radius: 28px;
+      padding: 30px;
+      background: linear-gradient(160deg, #ffffff 0%, #f8fbff 50%, #e9f2ff 100%);
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 14px 36px rgba(15,23,42,0.05);
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .profile-box {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1E66D0, #7ab4ff);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .name {
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .role {
+      font-size: 16px;
+      color: #1E66D0;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .contacts {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+
+    .about {
+      font-size: 15px;
+      color: #4b5563;
+      line-height: 1.9;
+    }
+
+    .content-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .section-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.04);
+    }
+
+    .section-card h3 {
+      margin: 0 0 16px;
+      font-size: 22px;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .list-item {
+      border: 1px solid #e9eef5;
+      border-radius: 18px;
+      padding: 16px;
+      background: #fbfdff;
+    }
+
+    .item-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f2933;
+      margin-bottom: 4px;
+    }
+
+    .item-meta {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+
+    .item-text {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: #eef5ff;
+      color: #1E66D0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .info-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .info-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: #fbfdff;
+      border: 1px solid #e9eef5;
+    }
+
+    .info-label {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .info-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f2933;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      max-width: 1180px;
+      margin: 22px auto 0;
+      text-align: center;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 18px;
+      }
+
+      .topbar,
+      .hero {
+        padding: 20px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .topbar-actions {
+        flex-direction: column;
+      }
+
+      .profile-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .name {
+        font-size: 28px;
+      }
+
+      .info-block {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="topbar">
+      <div class="logo">
+        <div class="logo-circle">
+          <img src="irpolog.png" alt="Логотип ИРКПО" />
+        </div>
+        <div>
+          <div style="font-size:12px;color:#6b7280">ИРКПО</div>
+          <div style="font-weight:700">Центр карьеры ИРКПО</div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="btn-secondary">Скопировать ссылку</button>
+        <button class="btn-primary">Скачать PDF</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="profile-box">
+        <div class="avatar">ЛД</div>
+        <div>
+          <div class="name">Лира Досик</div>
+          <div class="role">Студент / Начинающий web-дизайнер</div>
+          <div class="contacts">
+            example@mail.ru · +7 (900) 000-00-00 · Иркутск
+          </div>
+        </div>
+      </div>
+
+      <div class="about">
+        Студентка, интересующаяся веб-дизайном, интерфейсами и цифровыми проектами. Развиваю навыки создания макетов, визуального оформления и работы с учебными и цифровыми материалами. Имею проекты и достижения, которые могут быть полезны для практики и стажировки.
+      </div>
+    </section>
+
+    <div class="content-grid" style="display:block; max-width:1180px; margin:0 auto;">
+      <section class="section-card" style="padding:34px;">
+        <div style="display:grid; grid-template-columns: 0.9fr 1.1fr; gap:36px; align-items:start;">
+          <div>
+            <div style="margin-bottom:28px;">
+              <h3 style="margin:0 0 14px; font-size:20px;">Основная информация</h3>
+              <div class="muted" style="font-size:14px; line-height:2;">
+                <b style="color:#1f2933;">Учебное заведение:</b> ИРКПО<br>
+                <b style="color:#1f2933;">Специальность:</b> Информационные системы и программирование<br>
+                <b style="color:#1f2933;">Курс:</b> 4 курс<br>
+                <b style="color:#1f2933;">Формат занятости:</b> Практика / стажировка
+              </div>
+            </div>
+
+            <div style="margin-bottom:28px;">
+              <h3 style="margin:0 0 14px; font-size:20px;">Навыки</h3>
+              <div class="skills">
+                <span class="skill">Figma</span>
+                <span class="skill">UI-дизайн</span>
+                <span class="skill">Макеты интерфейсов</span>
+                <span class="skill">Визуальные материалы</span>
+                <span class="skill">Оформление проектов</span>
+              </div>
+            </div>
+
+            <div>
+              <h3 style="margin:0 0 14px; font-size:20px;">Образование</h3>
+              <div class="item-title">Иркутский региональный колледж педагогического образования</div>
+              <div class="item-meta">2022–2026</div>
+              <div class="item-text">Специальность: Информационные системы и программирование.</div>
+            </div>
+          </div>
+
+          <div>
+            <div style="margin-bottom:28px; padding-bottom:24px; border-bottom:1px solid #e5e7eb;">
+              <h3 style="margin:0 0 14px; font-size:20px;">Проекты и работы</h3>
+              <div style="margin-bottom:18px;">
+                <div class="item-title">Дизайн веб-приложения “Центр карьеры ИРКПО”</div>
+                <div class="item-meta">Учебный проект</div>
+                <div class="item-text">Разработка структуры экранов, визуального стиля и макетов основных страниц для дипломного проекта.</div>
+              </div>
+              <div>
+                <div class="item-title">Портфолио студента</div>
+                <div class="item-meta">Личный проект</div>
+                <div class="item-text">Оформление цифрового портфолио с проектами, достижениями и презентацией навыков.</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom:28px; padding-bottom:24px; border-bottom:1px solid #e5e7eb;">
+              <h3 style="margin:0 0 14px; font-size:20px;">Достижения</h3>
+              <div style="margin-bottom:18px;">
+                <div class="item-title">Сертификат по веб-дизайну</div>
+                <div class="item-meta">2026 · Дополнительное образование</div>
+                <div class="item-text">Пройден курс по созданию интерфейсов и визуальному оформлению цифровых продуктов.</div>
+              </div>
+              <div>
+                <div class="item-title">Участие в конкурсе цифровых работ</div>
+                <div class="item-meta">2025 · Творческая деятельность</div>
+                <div class="item-text">Подготовлен конкурсный проект с визуальной концепцией и оформлением экранов.</div>
+              </div>
+            </div>
+
+            <div>
+              <h3 style="margin:0 0 14px; font-size:20px;">Рекомендация</h3>
+              <div class="item-text">Студентка показывает аккуратность в работе, интерес к дизайну интерфейсов и стремление развиваться в цифровой сфере.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <div class="footer-note">
+      Публичная страница резюме сформирована на платформе «Центр карьеры ИРКПО».
+    </div>
+  </div>
+</body>
+</html>

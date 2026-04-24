@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Центр карьеры ИРКПО</title>
+<style>
+body{
+margin:0;
+font-family: Inter, Arial, sans-serif;
+background:#ffffff;
+color:#1f2933;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+border-bottom:1px solid #e5e7eb;
+background:white;
+position:sticky;
+top:0;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo-circle{
+width:52px;
+height:52px;
+border-radius:50%;
+background:#ffffff;
+border:1px solid #dbe4f0;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+box-shadow:0 4px 12px rgba(30,102,208,0.08);
+}
+
+nav a{
+margin:0 14px;
+text-decoration:none;
+color:#374151;
+font-size:14px;
+}
+
+nav a:hover{
+color:#1E66D0;
+}
+
+.header-buttons button{
+margin-left:10px;
+padding:10px 16px;
+border-radius:10px;
+border:1px solid #d1d5db;
+background:white;
+cursor:pointer;
+}
+
+.primary{
+background:#1E66D0;
+color:white;
+border:none;
+}
+
+.hero{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:80px 40px;
+background:linear-gradient(180deg,#ffffff,#f5f8fc);
+}
+
+.hero-text{
+max-width:600px;
+}
+
+.hero h1{
+font-size:42px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:18px;
+color:#6b7280;
+line-height:1.6;
+}
+
+.hero-buttons{
+margin-top:30px;
+}
+
+.hero-buttons button{
+padding:14px 22px;
+margin-right:10px;
+border-radius:12px;
+border:1px solid #e5e7eb;
+font-size:14px;
+cursor:pointer;
+}
+
+.hero-buttons .primary{
+border:none;
+}
+
+.dashboard-preview{
+background:white;
+border-radius:20px;
+padding:20px;
+border:1px solid #e5e7eb;
+width:360px;
+box-shadow:0 15px 40px rgba(0,0,0,0.06);
+}
+
+.card{
+background:#f5f8fc;
+padding:14px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.section{
+padding:70px 40px;
+}
+
+.section-title{
+font-size:32px;
+margin-bottom:30px;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.feature{
+border:1px solid #e5e7eb;
+border-radius:16px;
+padding:20px;
+background:white;
+}
+
+.feature h3{
+margin-top:10px;
+}
+
+.steps{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.step{
+background:white;
+border:1px solid #e5e7eb;
+padding:20px;
+border-radius:16px;
+}
+
+.cta{
+background:#1E66D0;
+color:white;
+padding:60px 40px;
+border-radius:20px;
+margin:40px;
+}
+
+footer{
+border-top:1px solid #e5e7eb;
+padding:30px 40px;
+font-size:14px;
+color:#6b7280;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+
+<div class="logo">
+<div class="logo-circle"><img src="irpolog.png" alt="Логотип ИРКПО" style="width:26px;height:26px;object-fit:contain;"></div>
+<div>
+<div style="font-size:12px;color:#6b7280">ИРКПО</div>
+<div style="font-weight:700">Центр карьеры ИРКПО</div>
+</div>
+</div>
+
+
+
+<div class="header-buttons">
+<button>Войти</button>
+<button>Регистрация</button>
+</div>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-text">
+<h1>Электронное портфолио и карьерные возможности студентов</h1>
+
+<p>
+Платформа Центра карьеры ИРКПО помогает студентам собирать достижения, оформлять резюме,
+находить вакансии и образовательные возможности.
+</p>
+
+<div class="hero-buttons">
+<button class="primary">Создать портфолио</button>
+<button>Смотреть вакансии</button>
+</div>
+
+</div>
+
+</section>
+
+<section class="section">
+
+<div class="section-title">Возможности платформы</div>
+
+<div class="features">
+
+<div class="feature">
+<h3>Электронное портфолио</h3>
+<p>Добавляйте достижения, проекты, сертификаты и рекомендации.</p>
+</div>
+
+<div class="feature">
+<h3>Вакансии и стажировки</h3>
+<p>Просматривайте предложения работы и практики.</p>
+</div>
+
+<div class="feature">
+<h3>Курсы и семинары</h3>
+<p>Находите образовательные программы и мероприятия.</p>
+</div>
+
+<div class="feature">
+<h3>Конструктор резюме</h3>
+<p>Создавайте резюме на основе вашего портфолио.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="section" style="background:#f5f8fc">
+
+<div class="section-title">Как это работает</div>
+
+<div style="max-width:900px;font-size:18px;line-height:1.9;color:#4b5563;">
+<b style="color:#1E66D0;">1.</b> Создайте аккаунт и заполните профиль студента.<br>
+<b style="color:#1E66D0;">2.</b> Добавляйте достижения, проекты, навыки и рекомендации в электронное портфолио.<br>
+<b style="color:#1E66D0;">3.</b> Соберите резюме на основе портфолио и отправьте его работодателю.
+</div>
+
+</section>
+
+<div class="cta" style="display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;">
+<div style="max-width:560px;">
+<h2 style="margin-top:0;">Создайте своё цифровое портфолио</h2>
+<p style="line-height:1.8;">Начните формировать карьерный профиль уже сегодня. Добавляйте достижения, собирайте резюме и открывайте новые возможности вместе с Центром карьеры ИРКПО.</p>
+<br>
+<button style="padding:12px 20px;border:none;border-radius:10px;background:white;color:#1E66D0;font-weight:bold;cursor:pointer">Зарегистрироваться</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<footer>
+
+<b>Центр карьеры ИРКПО</b>
+<br><br>
+Иркутский региональный колледж педагогического образования
+
+</footer>
+
+</body>
+</html>
