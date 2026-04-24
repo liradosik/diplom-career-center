@@ -95,13 +95,6 @@ def role_required(*roles):
         return wrapper
 
     return decorator
-
-
-def is_valid_status(value: str) -> bool:
-    # Допустимые статусы для вакансий и учебных программ.
-    return value in {"active", "hidden", "archive"}
-
-
 @app.route("/")
 def index():
     if current_user.is_authenticated:
@@ -182,39 +175,6 @@ def student_portfolio():
 
     entries = PortfolioEntry.query.filter_by(student_id=current_user.id).order_by(PortfolioEntry.created_at.desc()).all()
     return render_template("student/portfolio.html", entries=entries)
-
-
-@app.route("/student/portfolio/<int:entry_id>/edit", methods=["GET", "POST"])
-@login_required
-@role_required("student")
-def student_portfolio_edit(entry_id):
-    # Студент может редактировать только свою запись.
-    entry = PortfolioEntry.query.filter_by(id=entry_id, student_id=current_user.id).first_or_404()
-
-    if request.method == "POST":
-        entry.title = request.form.get("title", "").strip()
-        entry.description = request.form.get("description", "").strip()
-        entry.link = request.form.get("link", "").strip()
-        # После редактирования запись снова уходит на проверку куратора.
-        entry.status = "pending"
-        db.session.commit()
-        flash("Запись портфолио обновлена и отправлена на повторную проверку.", "success")
-        return redirect(url_for("student_portfolio"))
-
-    return render_template("student/portfolio_edit.html", entry=entry)
-
-
-@app.route("/student/portfolio/<int:entry_id>/delete", methods=["POST"])
-@login_required
-@role_required("student")
-def student_portfolio_delete(entry_id):
-    # Студент может удалить только свою запись.
-    entry = PortfolioEntry.query.filter_by(id=entry_id, student_id=current_user.id).first_or_404()
-    db.session.delete(entry)
-    db.session.commit()
-    flash("Запись портфолио удалена.", "success")
-    return redirect(url_for("student_portfolio"))
-
 
 @app.route("/resume/<token>")
 def public_resume(token):
@@ -297,17 +257,12 @@ def admin_students():
 @role_required("admin")
 def admin_vacancies():
     if request.method == "POST":
-        status = request.form.get("status", "active")
-        if not is_valid_status(status):
-            flash("Некорректный статус вакансии.", "error")
-            return redirect(url_for("admin_vacancies"))
-
+      
         vacancy = Vacancy(
             title=request.form.get("title", "").strip(),
             company=request.form.get("company", "").strip(),
             description=request.form.get("description", "").strip(),
             contacts=request.form.get("contacts", "").strip(),
-            status=status,
         )
         db.session.add(vacancy)
         db.session.commit()
@@ -323,51 +278,9 @@ def admin_vacancies():
 @role_required("admin")
 def admin_vacancy_status(vacancy_id):
     vacancy = Vacancy.query.get_or_404(vacancy_id)
-    status = request.form.get("status", "active")
-    if not is_valid_status(status):
-        flash("Некорректный статус вакансии.", "error")
-        return redirect(url_for("admin_vacancies"))
-
-    vacancy.status = status
     db.session.commit()
     flash("Статус вакансии изменён.", "success")
     return redirect(url_for("admin_vacancies"))
-
-
-@app.route("/admin/vacancies/<int:vacancy_id>/edit", methods=["GET", "POST"])
-@login_required
-@role_required("admin")
-def admin_vacancy_edit(vacancy_id):
-    vacancy = Vacancy.query.get_or_404(vacancy_id)
-
-    if request.method == "POST":
-        status = request.form.get("status", "active")
-        if not is_valid_status(status):
-            flash("Некорректный статус вакансии.", "error")
-            return redirect(url_for("admin_vacancy_edit", vacancy_id=vacancy.id))
-
-        vacancy.title = request.form.get("title", "").strip()
-        vacancy.company = request.form.get("company", "").strip()
-        vacancy.description = request.form.get("description", "").strip()
-        vacancy.contacts = request.form.get("contacts", "").strip()
-        vacancy.status = status
-        db.session.commit()
-        flash("Вакансия обновлена.", "success")
-        return redirect(url_for("admin_vacancies"))
-
-    return render_template("admin/vacancy_edit.html", vacancy=vacancy)
-
-
-@app.route("/admin/vacancies/<int:vacancy_id>/delete", methods=["POST"])
-@login_required
-@role_required("admin")
-def admin_vacancy_delete(vacancy_id):
-    vacancy = Vacancy.query.get_or_404(vacancy_id)
-    db.session.delete(vacancy)
-    db.session.commit()
-    flash("Вакансия удалена.", "success")
-    return redirect(url_for("admin_vacancies"))
-
 
 @app.route("/admin/courses", methods=["GET", "POST"])
 @login_required
@@ -376,28 +289,10 @@ def admin_courses():
     if request.method == "POST":
         format_type = request.form.get("format_type", "online")
         places = request.form.get("places")
-        status = request.form.get("status", "active")
-
-        if format_type not in {"online", "offline"}:
-            flash("Некорректный формат программы.", "error")
-            return redirect(url_for("admin_courses"))
-
-        if not is_valid_status(status):
-            flash("Некорректный статус программы.", "error")
-            return redirect(url_for("admin_courses"))
-
-        try:
-            parsed_places = int(places) if format_type == "offline" and places else None
-        except ValueError:
-            flash("Количество мест должно быть числом.", "error")
-            return redirect(url_for("admin_courses"))
         course = Course(
             title=request.form.get("title", "").strip(),
             kind=request.form.get("kind", "course"),
             format_type=format_type,
-            places=parsed_places,
-            description=request.form.get("description", "").strip(),
-            status=status,
         )
         db.session.add(course)
         db.session.commit()
@@ -413,63 +308,9 @@ def admin_courses():
 @role_required("admin")
 def admin_course_status(course_id):
     course = Course.query.get_or_404(course_id)
-    status = request.form.get("status", "active")
-    if not is_valid_status(status):
-        flash("Некорректный статус программы.", "error")
-        return redirect(url_for("admin_courses"))
-
-    course.status = status
     db.session.commit()
     flash("Статус программы изменён.", "success")
     return redirect(url_for("admin_courses"))
-
-
-@app.route("/admin/courses/<int:course_id>/edit", methods=["GET", "POST"])
-@login_required
-@role_required("admin")
-def admin_course_edit(course_id):
-    course = Course.query.get_or_404(course_id)
-
-    if request.method == "POST":
-        format_type = request.form.get("format_type", "online")
-        places = request.form.get("places")
-        status = request.form.get("status", "active")
-
-        if format_type not in {"online", "offline"}:
-            flash("Некорректный формат программы.", "error")
-            return redirect(url_for("admin_course_edit", course_id=course.id))
-
-        if not is_valid_status(status):
-            flash("Некорректный статус программы.", "error")
-            return redirect(url_for("admin_course_edit", course_id=course.id))
-
-        course.title = request.form.get("title", "").strip()
-        course.kind = request.form.get("kind", "course")
-        course.format_type = format_type
-        try:
-            course.places = int(places) if format_type == "offline" and places else None
-        except ValueError:
-            flash("Количество мест должно быть числом.", "error")
-            return redirect(url_for("admin_course_edit", course_id=course.id))
-        course.description = request.form.get("description", "").strip()
-        course.status = status
-        db.session.commit()
-        flash("Программа обновлена.", "success")
-        return redirect(url_for("admin_courses"))
-
-    return render_template("admin/course_edit.html", course=course)
-
-
-@app.route("/admin/courses/<int:course_id>/delete", methods=["POST"])
-@login_required
-@role_required("admin")
-def admin_course_delete(course_id):
-    course = Course.query.get_or_404(course_id)
-    db.session.delete(course)
-    db.session.commit()
-    flash("Программа удалена.", "success")
-    return redirect(url_for("admin_courses"))
-
 
 @app.route("/vacancies")
 @login_required

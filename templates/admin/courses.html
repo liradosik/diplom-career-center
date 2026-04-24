@@ -23,12 +23,6 @@
           <select name="status"><option {% if course.status=='active' %}selected{% endif %}>active</option><option {% if course.status=='hidden' %}selected{% endif %}>hidden</option><option {% if course.status=='archive' %}selected{% endif %}>archive</option></select>
           <button class="btn light" type="submit">Обновить</button>
         </form>
-        <div style="margin-top:8px; display:flex; gap:8px;">
-          <a class="btn light" href="{{ url_for('admin_course_edit', course_id=course.id) }}">Редактировать</a>
-          <form method="post" action="{{ url_for('admin_course_delete', course_id=course.id) }}" onsubmit="return confirm('Удалить программу?');">
-            <button class="btn gray" type="submit">Удалить</button>
-          </form>
-        </div>
       </div>
     {% else %}<p>Программ пока нет.</p>{% endfor %}
   </div>

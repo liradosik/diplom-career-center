@@ -24,12 +24,6 @@
           <select name="status"><option {% if vacancy.status=='active' %}selected{% endif %}>active</option><option {% if vacancy.status=='hidden' %}selected{% endif %}>hidden</option><option {% if vacancy.status=='archive' %}selected{% endif %}>archive</option></select>
           <button class="btn light" type="submit">Обновить</button>
         </form>
-        <div style="margin-top:8px; display:flex; gap:8px;">
-          <a class="btn light" href="{{ url_for('admin_vacancy_edit', vacancy_id=vacancy.id) }}">Редактировать</a>
-          <form method="post" action="{{ url_for('admin_vacancy_delete', vacancy_id=vacancy.id) }}" onsubmit="return confirm('Удалить вакансию?');">
-            <button class="btn gray" type="submit">Удалить</button>
-          </form>
-        </div>
       </div>
     {% else %}<p>Вакансий пока нет.</p>{% endfor %}
   </div>
