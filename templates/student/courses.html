@@ -6,8 +6,20 @@
   <div class="card">
     <h3>{{ course.title }}</h3>
     <p>Тип: {{ course.kind }} | Формат: {{ course.format_type }}</p>
-    {% if course.format_type == 'offline' %}<p>Мест: {{ course.places or 0 }}</p>{% endif %}
+    {% if course.format_type == 'offline' %}
+      <p>Свободных мест: {{ course_availability.get(course.id, 0) }} из {{ course.places or 0 }}</p>
+    {% endif %}
     <p>{{ course.description }}</p>
+
+    {% if course.id in enrolled_course_ids %}
+      <button class="btn light" type="button" disabled>Вы записаны</button>
+    {% elif course.format_type == 'offline' and course_availability.get(course.id, 0) <= 0 %}
+      <button class="btn gray" type="button" disabled>Мест нет</button>
+    {% else %}
+      <form method="post" action="{{ url_for('student_course_enroll', course_id=course.id) }}">
+        <button class="btn" type="submit">Записаться</button>
+      </form>
+    {% endif %}
   </div>
   {% else %}<p>Нет активных программ.</p>{% endfor %}
 </div>
