@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Центр карьеры ИРКПО</title>
+<style>
+body{margin:0;font-family: Inter, Arial, sans-serif;background:#ffffff;color:#1f2933;}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 40px;border-bottom:1px solid #e5e7eb;background:white;position:sticky;top:0;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-circle{width:52px;height:52px;border-radius:50%;background:#fff;border:1px solid #dbe4f0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.logo-circle img{width:26px;height:26px;object-fit:contain;}
+.hero{max-width:1180px;margin:0 auto;padding:56px 24px;display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:center;}
+.card{border:1px solid #e5e7eb;border-radius:24px;padding:28px;background:linear-gradient(160deg,#ffffff 0%,#f8fbff 60%,#e8f2ff 100%);}
+.btn{display:inline-block;background:#1E66D0;color:white;text-decoration:none;padding:12px 18px;border-radius:12px;font-weight:600;}
+@media(max-width:900px){.hero{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <div class="logo-circle"><img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Логотип"></div>
+    <div><div style="font-size:12px;color:#6b7280">ИРКПО</div><div style="font-weight:700">Центр карьеры ИРКПО</div></div>
+  </div>
+  <a class="btn" href="{{ url_for('login') }}">Войти</a>
+</header>
+
+<section class="hero">
+  <div>
+    <h1 style="font-size:46px;line-height:1.08;margin:0 0 16px;">Центр карьеры ИРКПО</h1>
+    <p style="font-size:18px;line-height:1.7;color:#6b7280;max-width:680px;">Платформа для студентов, кураторов и администрации: портфолио, публичное резюме, вакансии и образовательные программы в одном месте.</p>
+    <a class="btn" href="{{ url_for('login') }}">Перейти к авторизации</a>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0;">Что уже доступно</h3>
+    <ul style="line-height:1.9;color:#4b5563;padding-left:20px;">
+      <li>Вход по email и паролю.</li>
+      <li>Роли: student / curator / admin.</li>
+      <li>Портфолио и публичное резюме.</li>
+      <li>Управление вакансиями и курсами.</li>
+    </ul>
+  </div>
+</section>
+</body>
+</html>
