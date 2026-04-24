@@ -1,0 +1,15 @@
+{% extends 'base_public.html' %}
+{% block content %}
+<div class="container" style="padding: 28px 16px;">
+  <div class="card">
+    <h1>{{ student.full_name }}</h1>
+    <p><strong>Группа:</strong> {{ student.group_name }}</p>
+    <p><strong>Контакты:</strong> {{ student.contacts }}</p>
+    <p>{{ student.about }}</p>
+    <h3>Подтверждённое портфолио</h3>
+    {% for entry in entries %}
+      <p><strong>{{ entry.title }}</strong> — {{ entry.description }}{% if entry.link %} (<a href="{{ entry.link }}" target="_blank">ссылка</a>){% endif %}</p>
+    {% else %}<p>Нет подтверждённых записей.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<h2>Курсы / семинары / практики</h2>
+<div class="grid two">
+  {% for course in courses %}
+  <div class="card">
+    <h3>{{ course.title }}</h3>
+    <p>Тип: {{ course.kind }} | Формат: {{ course.format_type }}</p>
+    {% if course.format_type == 'offline' %}<p>Мест: {{ course.places or 0 }}</p>{% endif %}
+    <p>{{ course.description }}</p>
+  </div>
+  {% else %}<p>Нет активных программ.</p>{% endfor %}
+</div>
+{% endblock %}

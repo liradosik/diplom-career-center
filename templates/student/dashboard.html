@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Личный кабинет — Центр карьеры ИРКПО</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" style="padding:22px 16px;">
+      <div class="logo"><img src="{{ url_for('static', filename='images/logo.svg') }}" alt="logo">ИРКПО</div>
+      <nav>
+        <a class="active" href="{{ url_for('student_dashboard') }}">Главная</a>
+        <a href="{{ url_for('student_profile') }}">Профиль</a>
+        <a href="{{ url_for('student_portfolio') }}">Портфолио</a>
+        <a href="{{ url_for('student_vacancies') }}">Вакансии</a>
+        <a href="{{ url_for('student_courses') }}">Курсы</a>
+        <a href="{{ url_for('logout') }}">Выход</a>
+      </nav>
+    </aside>
+    <main class="main" style="padding:24px;">
+      <div class="card" style="border-radius:26px;margin-bottom:20px;">
+        <div style="font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#1E66D0;margin-bottom:10px;">Личный кабинет</div>
+        <h1 style="margin:0 0 10px;font-size:34px;">Здравствуйте, {{ current_user.full_name }}!</h1>
+        <p style="margin:0;color:#6b7280;font-size:16px;line-height:1.8;">Здесь вы можете редактировать профиль, пополнять портфолио и отслеживать карьерные возможности.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <h3>Свежие вакансии</h3>
+          {% for vacancy in vacancies[:6] %}
+            <p><strong>{{ vacancy.title }}</strong> — {{ vacancy.company }}</p>
+          {% else %}
+            <p>Пока нет активных вакансий.</p>
+          {% endfor %}
+        </div>
+        <div class="card">
+          <h3>Свежие программы</h3>
+          {% for course in courses[:6] %}
+            <p><strong>{{ course.title }}</strong> — {{ course.kind }} ({{ course.format_type }})</p>
+          {% else %}
+            <p>Пока нет активных программ.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
