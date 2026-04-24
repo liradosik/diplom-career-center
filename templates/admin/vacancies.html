@@ -1,0 +1,37 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="grid two">
+  <div class="card">
+    <h2>Новая вакансия</h2>
+    <form method="post" class="form">
+      <div><label>Название</label><input name="title" required></div>
+      <div><label>Компания</label><input name="company" required></div>
+      <div><label>Контакты</label><input name="contacts"></div>
+      <div><label>Описание</label><textarea name="description"></textarea></div>
+      <div><label>Статус</label>
+        <select name="status"><option>active</option><option>hidden</option><option>archive</option></select>
+      </div>
+      <button class="btn" type="submit">Сохранить</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Все вакансии</h2>
+    {% for vacancy in vacancies %}
+      <div style="border-bottom:1px solid #eee; padding:8px 0;">
+        <strong>{{ vacancy.title }}</strong> ({{ vacancy.company }})
+        <span class="status {{ vacancy.status }}">{{ vacancy.status }}</span>
+        <form method="post" action="{{ url_for('admin_vacancy_status', vacancy_id=vacancy.id) }}" style="margin-top:6px; display:flex; gap:8px;">
+          <select name="status"><option {% if vacancy.status=='active' %}selected{% endif %}>active</option><option {% if vacancy.status=='hidden' %}selected{% endif %}>hidden</option><option {% if vacancy.status=='archive' %}selected{% endif %}>archive</option></select>
+          <button class="btn light" type="submit">Обновить</button>
+        </form>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <a class="btn light" href="{{ url_for('admin_vacancy_edit', vacancy_id=vacancy.id) }}">Редактировать</a>
+          <form method="post" action="{{ url_for('admin_vacancy_delete', vacancy_id=vacancy.id) }}" onsubmit="return confirm('Удалить вакансию?');">
+            <button class="btn gray" type="submit">Удалить</button>
+          </form>
+        </div>
+      </div>
+    {% else %}<p>Вакансий пока нет.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

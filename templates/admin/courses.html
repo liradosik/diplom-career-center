@@ -1,0 +1,36 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="grid two">
+  <div class="card">
+    <h2>Новая программа</h2>
+    <form method="post" class="form">
+      <div><label>Название</label><input name="title" required></div>
+      <div><label>Тип</label><select name="kind"><option value="course">course</option><option value="seminar">seminar</option><option value="practice">practice</option></select></div>
+      <div><label>Формат</label><select name="format_type"><option value="online">online</option><option value="offline">offline</option></select></div>
+      <div><label>Места (для offline)</label><input type="number" min="0" name="places"></div>
+      <div><label>Описание</label><textarea name="description"></textarea></div>
+      <div><label>Статус</label><select name="status"><option>active</option><option>hidden</option><option>archive</option></select></div>
+      <button class="btn" type="submit">Сохранить</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Список программ</h2>
+    {% for course in courses %}
+      <div style="border-bottom:1px solid #eee; padding:8px 0;">
+        <strong>{{ course.title }}</strong> ({{ course.kind }}, {{ course.format_type }})
+        <span class="status {{ course.status }}">{{ course.status }}</span>
+        <form method="post" action="{{ url_for('admin_course_status', course_id=course.id) }}" style="margin-top:6px; display:flex; gap:8px;">
+          <select name="status"><option {% if course.status=='active' %}selected{% endif %}>active</option><option {% if course.status=='hidden' %}selected{% endif %}>hidden</option><option {% if course.status=='archive' %}selected{% endif %}>archive</option></select>
+          <button class="btn light" type="submit">Обновить</button>
+        </form>
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <a class="btn light" href="{{ url_for('admin_course_edit', course_id=course.id) }}">Редактировать</a>
+          <form method="post" action="{{ url_for('admin_course_delete', course_id=course.id) }}" onsubmit="return confirm('Удалить программу?');">
+            <button class="btn gray" type="submit">Удалить</button>
+          </form>
+        </div>
+      </div>
+    {% else %}<p>Программ пока нет.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

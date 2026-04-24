@@ -1,0 +1,15 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="card" style="max-width:860px;">
+  <h2>Редактирование записи портфолио</h2>
+  <form method="post" class="form">
+    <div><label>Название</label><input name="title" value="{{ entry.title }}" required></div>
+    <div><label>Описание</label><textarea name="description">{{ entry.description or '' }}</textarea></div>
+    <div><label>Ссылка</label><input name="link" value="{{ entry.link or '' }}"></div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn" type="submit">Сохранить</button>
+      <a class="btn light" href="{{ url_for('student_portfolio') }}">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
