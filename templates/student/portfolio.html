@@ -13,6 +13,12 @@
           <a class="btn light" href="{{ url_for('student_portfolio') }}">Отмена</a>
         {% endif %}
       </div>
+    <h2>Добавить запись портфолио</h2>
+    <form method="post" class="form">
+      <div><label>Название</label><input name="title" required></div>
+      <div><label>Описание</label><textarea name="description"></textarea></div>
+      <div><label>Ссылка</label><input name="link"></div>
+      <button class="btn" type="submit">Добавить</button>
     </form>
   </div>
   <div class="card">
