@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+
+# Не добавляем бинарные логотипы в PR
+irpolog.png
+static/images/irpolog.png
