@@ -216,6 +216,7 @@ def student_portfolio_delete(entry_id):
     flash("Запись портфолио удалена.", "success")
     return redirect(url_for("student_portfolio"))
 
+    return render_template("student/portfolio.html", entries=entries)
 
 @app.route("/resume/<token>")
 def public_resume(token):
@@ -303,6 +304,7 @@ def admin_vacancies():
             flash("Некорректный статус вакансии.", "error")
             return redirect(url_for("admin_vacancies"))
 
+      
         vacancy = Vacancy(
             title=request.form.get("title", "").strip(),
             company=request.form.get("company", "").strip(),
@@ -317,6 +319,7 @@ def admin_vacancies():
 
     vacancies = Vacancy.query.order_by(Vacancy.created_at.desc()).all()
     return render_template("admin/vacancies.html", vacancies=vacancies, edit_vacancy=None)
+    return render_template("admin/vacancies.html", vacancies=vacancies)
 
 
 @app.route("/admin/vacancies/<int:vacancy_id>/status", methods=["POST"])
@@ -408,6 +411,7 @@ def admin_courses():
 
     courses = Course.query.order_by(Course.id.desc()).all()
     return render_template("admin/courses.html", courses=courses, edit_course=None)
+    return render_template("admin/courses.html", courses=courses)
 
 
 @app.route("/admin/courses/<int:course_id>/status", methods=["POST"])

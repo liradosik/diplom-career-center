@@ -16,6 +16,15 @@
           <a class="btn light" href="{{ url_for('admin_courses') }}">Отмена</a>
         {% endif %}
       </div>
+    <h2>Новая программа</h2>
+    <form method="post" class="form">
+      <div><label>Название</label><input name="title" required></div>
+      <div><label>Тип</label><select name="kind"><option value="course">course</option><option value="seminar">seminar</option><option value="practice">practice</option></select></div>
+      <div><label>Формат</label><select name="format_type"><option value="online">online</option><option value="offline">offline</option></select></div>
+      <div><label>Места (для offline)</label><input type="number" min="0" name="places"></div>
+      <div><label>Описание</label><textarea name="description"></textarea></div>
+      <div><label>Статус</label><select name="status"><option>active</option><option>hidden</option><option>archive</option></select></div>
+      <button class="btn" type="submit">Сохранить</button>
     </form>
   </div>
   <div class="card">
