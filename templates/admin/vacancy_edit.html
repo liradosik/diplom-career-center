@@ -1,0 +1,24 @@
+{% extends 'base_dashboard.html' %}
+{% block content %}
+<div class="card" style="max-width:860px;">
+  <h2>Редактирование вакансии</h2>
+  <form method="post" class="form">
+    <div><label>Название</label><input name="title" value="{{ vacancy.title }}" required></div>
+    <div><label>Компания</label><input name="company" value="{{ vacancy.company }}" required></div>
+    <div><label>Контакты</label><input name="contacts" value="{{ vacancy.contacts or '' }}"></div>
+    <div><label>Описание</label><textarea name="description">{{ vacancy.description or '' }}</textarea></div>
+    <div>
+      <label>Статус</label>
+      <select name="status">
+        <option value="active" {% if vacancy.status=='active' %}selected{% endif %}>active</option>
+        <option value="hidden" {% if vacancy.status=='hidden' %}selected{% endif %}>hidden</option>
+        <option value="archive" {% if vacancy.status=='archive' %}selected{% endif %}>archive</option>
+      </select>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn" type="submit">Сохранить</button>
+      <a class="btn light" href="{{ url_for('admin_vacancies') }}">Отмена</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
