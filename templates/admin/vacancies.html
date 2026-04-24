@@ -12,9 +12,9 @@
 
       <div><label>Статус</label>
         <select name="status">
-          <option value="active" {% if not edit_vacancy or edit_vacancy.status=='active' %}selected{% endif %}>active</option>
-          <option value="hidden" {% if edit_vacancy and edit_vacancy.status=='hidden' %}selected{% endif %}>hidden</option>
-          <option value="archive" {% if edit_vacancy and edit_vacancy.status=='archive' %}selected{% endif %}>archive</option>
+          <option value="active" {% if not edit_vacancy or edit_vacancy.status=='active' %}selected{% endif %}>{{ status_labels['active'] }}</option>
+          <option value="hidden" {% if edit_vacancy and edit_vacancy.status=='hidden' %}selected{% endif %}>{{ status_labels['hidden'] }}</option>
+          <option value="archive" {% if edit_vacancy and edit_vacancy.status=='archive' %}selected{% endif %}>{{ status_labels['archive'] }}</option>
         </select>
       </div>
 
@@ -29,18 +29,27 @@
 
   <div class="card">
     <h2>Список вакансий</h2>
+    <form method="get" style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+      <label for="vacancies-status-filter">Фильтр статуса</label>
+      <select id="vacancies-status-filter" name="status" onchange="this.form.submit()">
+        <option value="all" {% if status_filter == 'all' %}selected{% endif %}>Все</option>
+        <option value="active" {% if status_filter == 'active' %}selected{% endif %}>{{ status_labels['active'] }}</option>
+        <option value="hidden" {% if status_filter == 'hidden' %}selected{% endif %}>{{ status_labels['hidden'] }}</option>
+        <option value="archive" {% if status_filter == 'archive' %}selected{% endif %}>{{ status_labels['archive'] }}</option>
+      </select>
+    </form>
 
     {% for vacancy in vacancies %}
       <div style="border-bottom:1px solid #eee; padding:10px 0;">
         <strong>{{ vacancy.title }}</strong> ({{ vacancy.company }})
-        <span class="status {{ vacancy.status }}">{{ vacancy.status }}</span>
+        <span class="status {{ vacancy.status }}">{{ status_labels.get(vacancy.status, vacancy.status) }}</span>
         <p style="margin:6px 0;">{{ vacancy.description or '' }}</p>
 
         <form method="post" action="{{ url_for('admin_vacancy_status', vacancy_id=vacancy.id) }}" style="display:flex; gap:8px; margin-bottom:8px;">
           <select name="status">
-            <option value="active" {% if vacancy.status=='active' %}selected{% endif %}>active</option>
-            <option value="hidden" {% if vacancy.status=='hidden' %}selected{% endif %}>hidden</option>
-            <option value="archive" {% if vacancy.status=='archive' %}selected{% endif %}>archive</option>
+            <option value="active" {% if vacancy.status=='active' %}selected{% endif %}>{{ status_labels['active'] }}</option>
+            <option value="hidden" {% if vacancy.status=='hidden' %}selected{% endif %}>{{ status_labels['hidden'] }}</option>
+            <option value="archive" {% if vacancy.status=='archive' %}selected{% endif %}>{{ status_labels['archive'] }}</option>
           </select>
           <button class="btn light" type="submit">Обновить статус</button>
         </form>

@@ -102,6 +102,21 @@ def is_valid_status(value: str) -> bool:
     return value in {"active", "hidden", "archive"}
 
 
+STATUS_LABELS = {
+    "active": "Активно",
+    "hidden": "Скрыто",
+    "archive": "Архив",
+    "pending": "Ожидает проверки",
+    "approved": "Подтверждено",
+    "rejected": "Отклонено",
+}
+
+
+@app.context_processor
+def inject_status_labels():
+    return {"status_labels": STATUS_LABELS}
+
+
 @app.route("/")
 def index():
     if current_user.is_authenticated:
@@ -249,8 +264,24 @@ def curator_student_portfolio(student_id):
         flash("Статус записи обновлён.", "success")
         return redirect(url_for("curator_student_portfolio", student_id=student.id))
 
-    entries = PortfolioEntry.query.filter_by(student_id=student.id).order_by(PortfolioEntry.created_at.desc()).all()
-    return render_template("curator/portfolio_review.html", student=student, entries=entries)
+    review_filter = request.args.get("status", "all")
+    entries_query = PortfolioEntry.query.filter_by(student_id=student.id).order_by(PortfolioEntry.created_at.desc())
+    if review_filter in {"pending", "approved", "rejected"}:
+        entries_query = entries_query.filter_by(status=review_filter)
+    else:
+        review_filter = "all"
+
+    entries = entries_query.all()
+    pending_entries = PortfolioEntry.query.filter_by(student_id=student.id, status="pending").order_by(
+        PortfolioEntry.created_at.desc()
+    ).all()
+    return render_template(
+        "curator/portfolio_review.html",
+        student=student,
+        entries=entries,
+        pending_entries=pending_entries,
+        review_filter=review_filter,
+    )
 
 
 @app.route("/admin")
@@ -317,9 +348,15 @@ def admin_vacancies():
         flash("Вакансия сохранена.", "success")
         return redirect(url_for("admin_vacancies"))
 
-    vacancies = Vacancy.query.order_by(Vacancy.created_at.desc()).all()
-    return render_template("admin/vacancies.html", vacancies=vacancies, edit_vacancy=None)
-    return render_template("admin/vacancies.html", vacancies=vacancies)
+    status_filter = request.args.get("status", "all")
+    vacancies_query = Vacancy.query.order_by(Vacancy.created_at.desc())
+    if status_filter in {"active", "hidden", "archive"}:
+        vacancies_query = vacancies_query.filter_by(status=status_filter)
+    else:
+        status_filter = "all"
+
+    vacancies = vacancies_query.all()
+    return render_template("admin/vacancies.html", vacancies=vacancies, edit_vacancy=None, status_filter=status_filter)
 
 
 @app.route("/admin/vacancies/<int:vacancy_id>/status", methods=["POST"])
@@ -409,9 +446,15 @@ def admin_courses():
         flash("Курс/семинар/практика сохранены.", "success")
         return redirect(url_for("admin_courses"))
 
-    courses = Course.query.order_by(Course.id.desc()).all()
-    return render_template("admin/courses.html", courses=courses, edit_course=None)
-    return render_template("admin/courses.html", courses=courses)
+    status_filter = request.args.get("status", "all")
+    courses_query = Course.query.order_by(Course.id.desc())
+    if status_filter in {"active", "hidden", "archive"}:
+        courses_query = courses_query.filter_by(status=status_filter)
+    else:
+        status_filter = "all"
+
+    courses = courses_query.all()
+    return render_template("admin/courses.html", courses=courses, edit_course=None, status_filter=status_filter)
 
 
 @app.route("/admin/courses/<int:course_id>/status", methods=["POST"])
